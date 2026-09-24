@@ -1,0 +1,947 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Fluxy | Gestão financeira</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap"
+      rel="stylesheet"
+    >
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/estoque.css">
+    <link rel="stylesheet" href="css/calendario.css">
+    <link rel="stylesheet" href="css/perfil.css">
+    <link rel="stylesheet" href="css/login.css">
+  </head>
+  <body>
+    <div id="toast" class="toast"></div>
+    <section id="auth" class="auth-shell">
+      <div class="auth-card">
+        <div class="brand">
+          <span class="brand-mark">
+            <i class="fa-solid fa-chart-line"></i>
+          </span>
+          <span>Fluxy</span>
+        </div>
+        <p class="muted">Gestão financeira feita para o crescimento do seu negócio.</p>
+        <form id="login-form">
+          <label>
+            E-mail
+            <input id="login-email" type="email" required>
+          </label>
+          <label>
+            Senha
+            <div class="password-field">
+              <input id="login-password" type="password" required>
+              <button type="button" id="toggle-password" class="icon-btn">
+                <i class="fa-regular fa-eye"></i>
+              </button>
+            </div>
+          </label>
+          <label class="remember">
+            <input id="remember-login" type="checkbox">
+            <span>Lembrar acesso e manter sessão ativa</span>
+          </label>
+          <button class="btn primary full">Entrar no painel</button>
+          <button type="button" class="link-btn" data-auth="forgot">Esqueci minha senha</button>
+        </form>
+        <form id="register-form" class="hidden">
+          <label>
+            Nome completo
+            <input id="register-name" required>
+          </label>
+          <label>
+            E-mail
+            <input id="register-email" type="email" required>
+          </label>
+          <label>
+            Telefone
+            <input id="register-phone" type="tel">
+          </label>
+          <label>
+            CPF
+            <small>(opcional)</small>
+            <input id="register-cpf" inputmode="numeric">
+          </label>
+          <label>
+            Senha
+            <input id="register-password" type="password" minlength="8" required>
+          </label>
+          <label>
+            Confirmar senha
+            <input id="register-confirm" type="password" minlength="8" required>
+          </label>
+          <label>
+            Pergunta de seguranca
+            <select id="register-question">
+              <option value="Qual e o nome do seu primeiro animal de estimacao?">
+                Qual e o nome do seu primeiro animal de estimacao?
+              </option>
+              <option value="Qual e o nome da rua onde voce cresceu?">Qual e o nome da rua onde voce cresceu?</option>
+              <option value="Qual e o nome do meio da sua mae?">Qual e o nome do meio da sua mae?</option>
+              <option value="Qual foi sua primeira escola?">Qual foi sua primeira escola?</option>
+              <option value="Qual e a sua cidade natal?">Qual e a sua cidade natal?</option>
+            </select>
+          </label>
+          <label>
+            Resposta
+            <input id="register-answer" required placeholder="Usada para recuperar a senha">
+          </label>
+          <button class="btn primary full">Criar conta</button>
+          <button type="button" class="link-btn" data-auth="login">Já tenho uma conta</button>
+        </form>
+        <form id="forgot-form" class="hidden">
+          <h2>Recuperar acesso</h2>
+          <p class="muted" id="forgot-hint">Informe o e-mail da sua conta para continuar.</p>
+          <div id="forgot-step-email" class="auth-step">
+            <label>
+              E-mail
+              <input id="forgot-email" type="email" autocomplete="email">
+            </label>
+            <button type="button" class="btn primary full" id="forgot-continue">Continuar</button>
+          </div>
+          <div id="forgot-step-question" class="auth-step hidden">
+            <label id="forgot-question-label">
+              Pergunta de seguranca
+              <input id="forgot-answer" autocomplete="off">
+            </label>
+            <button type="button" class="btn primary full" id="forgot-check-answer">Validar resposta</button>
+          </div>
+          <div id="forgot-step-reset" class="auth-step hidden">
+            <label>
+              Nova senha
+              <div class="password-field">
+                <input id="reset-password" type="password" minlength="8">
+                <button type="button" class="icon-btn" data-toggle="#reset-password">
+                  <i class="fa-regular fa-eye"></i>
+                </button>
+              </div>
+            </label>
+            <label>
+              Confirmar nova senha
+              <div class="password-field">
+                <input id="reset-confirm" type="password" minlength="8">
+                <button type="button" class="icon-btn" data-toggle="#reset-confirm">
+                  <i class="fa-regular fa-eye"></i>
+                </button>
+              </div>
+            </label>
+            <button type="button" class="btn primary full" id="forgot-save-password">Salvar nova senha</button>
+          </div>
+          <button type="button" class="link-btn" data-auth="login">Voltar ao login</button>
+        </form>
+        <div id="company-onboarding" class="onboarding hidden">
+          <h2>Cadastre sua empresa</h2>
+          <p class="muted">Complete os dados para acessar seu painel.</p>
+          <form id="company-form">
+            <label>
+              Nome da empresa
+              <input id="company-legal" required>
+            </label>
+            <label>
+              Nome fantasia
+              <input id="company-trade">
+            </label>
+            <label>
+              CNPJ
+              <small>(opcional)</small>
+              <input id="company-cnpj">
+            </label>
+            <label>
+              Segmento de atuação
+              <input id="company-segment" required>
+            </label>
+            <label>
+              Telefone
+              <input id="company-tel">
+            </label>
+            <label>
+              E-mail
+              <input id="company-email" type="email">
+            </label>
+            <label>
+              Endereço
+              <input id="company-address">
+            </label>
+            <div class="form-grid">
+              <label>
+                Cidade
+                <input id="company-city">
+              </label>
+              <label>
+                Estado
+                <input id="company-state" maxlength="2">
+              </label>
+            </div>
+            <label>
+              CEP
+              <input id="company-cep">
+            </label>
+            <label>
+              Logo da empresa
+              <input id="company-logo" type="file" accept="image/png,image/jpeg">
+            </label>
+            <button class="btn primary full">Salvar e acessar painel</button>
+          </form>
+        </div>
+        <div class="auth-switch">
+          Ainda não possui conta?
+          <button class="link-btn" data-auth="register">Cadastre-se</button>
+        </div>
+        <small class="muted"></small>
+      </div>
+    </section>
+    <div id="app" class="app hidden">
+      <aside id="sidebar">
+        <div class="sidebar-head">
+          <div class="brand">
+            <span class="brand-mark">
+              <i class="fa-solid fa-chart-line"></i>
+            </span>
+            <span>Fluxy</span>
+          </div>
+          <button id="close-menu" class="icon-btn mobile-only">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+        <div class="workspace">
+          <span class="avatar small">AF</span>
+          <div>
+            <strong>Minha empresa</strong>
+            <small>Plano profissional</small>
+          </div>
+          <i class="fa-solid fa-chevron-down"></i>
+        </div>
+        <nav id="nav">
+          <button data-section="dashboard" class="nav-item active">
+            <i class="fa-solid fa-grid-2"></i>
+            Visão geral
+          </button>
+          <button data-section="financeiro" data-module="financeiro" class="nav-item">
+            <i class="fa-solid fa-arrow-right-arrow-left"></i>
+            Movimentações
+          </button>
+          <button data-section="contas" data-module="contas" class="nav-item">
+            <i class="fa-solid fa-file-invoice-dollar"></i>
+            Contas a pagar/receber
+          </button>
+          <button data-section="estoque" data-module="estoque" class="nav-item">
+            <i class="fa-solid fa-boxes-stacked"></i>
+            Estoque
+          </button>
+          <button data-section="fornecedores" data-module="fornecedores" class="nav-item">
+            <i class="fa-solid fa-truck-field"></i>
+            Fornecedores
+          </button>
+          <button data-section="clientes" data-module="clientes" class="nav-item">
+            <i class="fa-solid fa-users"></i>
+            Clientes
+          </button>
+          <button data-section="servicos" data-module="servicos" class="nav-item">
+            <i class="fa-solid fa-briefcase"></i>
+            Serviços
+          </button>
+          <button data-section="agenda" data-module="agenda" class="nav-item">
+            <i class="fa-solid fa-calendar-days"></i>
+            Agenda de serviços
+          </button>
+          <button data-section="calendario" data-module="calendario" class="nav-item">
+            <i class="fa-solid fa-calendar-check"></i>
+            Calendário
+          </button>
+          <button data-section="relatorios" data-module="relatorios" class="nav-item">
+            <i class="fa-solid fa-chart-pie"></i>
+            Relatórios
+          </button>
+        </nav>
+        <div class="nav-bottom">
+          <button data-section="configuracoes" class="nav-item">
+            <i class="fa-solid fa-gear"></i>
+            Configurações
+          </button>
+          <button id="logout" class="nav-item danger">
+            <i class="fa-solid fa-arrow-right-from-bracket"></i>
+            Sair
+          </button>
+        </div>
+      </aside>
+      <main>
+        <header class="topbar">
+          <button id="menu-toggle" class="icon-btn mobile-only">
+            <i class="fa-solid fa-bars"></i>
+          </button>
+          <div>
+            <span class="eyebrow" id="page-eyebrow">PAINEL PRINCIPAL</span>
+            <h1 id="page-title">Visão geral</h1>
+          </div>
+          <div class="top-actions">
+            <button id="notifications" class="icon-btn has-badge">
+              <i class="fa-regular fa-bell"></i>
+              <span id="notification-count">0</span>
+            </button>
+            <button data-section="configuracoes" class="icon-btn settings-link">
+              <i class="fa-solid fa-gear"></i>
+            </button>
+            <button data-section="perfil" class="profile-chip">
+              <span class="avatar">AF</span>
+              <span>
+                <strong id="user-name">Administrador</strong>
+                <small>Administrador</small>
+              </span>
+              <i class="fa-solid fa-chevron-down"></i>
+            </button>
+          </div>
+        </header>
+        <div class="content">
+          <section id="dashboard" class="section">
+            <div class="section-heading">
+              <div>
+                <h2>
+                  Bom dia,
+                  <span id="greeting-name">Administrador</span>
+                  !
+                </h2>
+                <p class="muted">Aqui está o resumo do seu negócio hoje.</p>
+              </div>
+              <div class="heading-actions">
+                <span class="period">
+                  <i class="fa-regular fa-calendar"></i>
+                  Este mês
+                  <i class="fa-solid fa-chevron-down"></i>
+                </span>
+                <button class="btn primary" data-modal="transaction">
+                  <i class="fa-solid fa-plus"></i>
+                  Nova movimentação
+                </button>
+              </div>
+            </div>
+            <div class="kpi-grid">
+              <article class="kpi-card dark">
+                <div>
+                  <span>Saldo disponível</span>
+                  <strong id="kpi-balance">R$ 0,00</strong>
+                  <small class="positive">
+                    <i class="fa-solid fa-arrow-trend-up"></i>
+                    <span id="balance-trend">0%</span>
+                    este mês
+                  </small>
+                </div>
+                <i class="fa-solid fa-wallet kpi-icon"></i>
+              </article>
+              <article class="kpi-card">
+                <div>
+                  <span>Entradas</span>
+                  <strong id="kpi-in">R$ 0,00</strong>
+                  <small class="positive">
+                    <i class="fa-solid fa-arrow-up"></i>
+                    Receitas do mês
+                  </small>
+                </div>
+                <i class="fa-solid fa-arrow-down-to-line kpi-icon green"></i>
+              </article>
+              <article class="kpi-card">
+                <div>
+                  <span>Saídas</span>
+                  <strong id="kpi-out">R$ 0,00</strong>
+                  <small class="negative">
+                    <i class="fa-solid fa-arrow-down"></i>
+                    Despesas do mês
+                  </small>
+                </div>
+                <i class="fa-solid fa-arrow-up-from-line kpi-icon red"></i>
+              </article>
+              <article class="kpi-card">
+                <div>
+                  <span>A receber</span>
+                  <strong id="kpi-receivable">R$ 0,00</strong>
+                  <small class="warning">
+                    <i class="fa-solid fa-clock"></i>
+                    Contas pendentes
+                  </small>
+                </div>
+                <i class="fa-solid fa-hourglass-half kpi-icon yellow"></i>
+              </article>
+            </div>
+            <div class="dashboard-grid">
+              <article class="panel chart-panel">
+                <div class="panel-head">
+                  <div>
+                    <h3>Fluxo de caixa</h3>
+                    <p class="muted">Acompanhe suas entradas e saídas</p>
+                  </div>
+                  <select id="chart-period">
+                    <option>Últimos 6 meses</option>
+                    <option>Este ano</option>
+                  </select>
+                </div>
+                <div class="chart-wrap">
+                  <canvas id="cash-chart"></canvas>
+                </div>
+              </article>
+              <article class="panel">
+                <div class="panel-head">
+                  <div>
+                    <h3>Próximos vencimentos</h3>
+                    <p class="muted">Não deixe nada passar</p>
+                  </div>
+                  <button class="text-btn" data-section="contas">Ver todos</button>
+                </div>
+                <div id="upcoming-list" class="list"></div>
+              </article>
+            </div>
+            <div class="dashboard-grid bottom">
+              <article class="panel">
+                <div class="panel-head">
+                  <h3>Atalhos rápidos</h3>
+                </div>
+                <div class="quick-actions">
+                  <button data-modal="transaction" data-type="entrada">
+                    <span class="quick green">
+                      <i class="fa-solid fa-arrow-down"></i>
+                    </span>
+                    <b>Registrar entrada</b>
+                    <small>Venda ou recebimento</small>
+                  </button>
+                  <button data-modal="transaction" data-type="saida">
+                    <span class="quick red">
+                      <i class="fa-solid fa-arrow-up"></i>
+                    </span>
+                    <b>Registrar saída</b>
+                    <small>Despesa ou pagamento</small>
+                  </button>
+                  <button data-modal="event">
+                    <span class="quick purple">
+                      <i class="fa-solid fa-calendar-plus"></i>
+                    </span>
+                    <b>Novo compromisso</b>
+                    <small>Organize sua agenda</small>
+                  </button>
+                  <button data-section="relatorios">
+                    <span class="quick yellow">
+                      <i class="fa-solid fa-file-chart-column"></i>
+                    </span>
+                    <b>Gerar relatório</b>
+                    <small>Visão do negócio</small>
+                  </button>
+                </div>
+              </article>
+              <article class="panel">
+                <div class="panel-head">
+                  <h3>Alertas inteligentes</h3>
+                  <span class="status-dot">Ao vivo</span>
+                </div>
+                <div id="insights" class="insights"></div>
+              </article>
+            </div>
+          </section>
+          <section id="financeiro" class="section hidden">
+            <div class="section-heading">
+              <div>
+                <h2>Movimentações</h2>
+                <p class="muted">Controle completo das entradas e saídas.</p>
+              </div>
+              <button class="btn primary" data-modal="transaction">
+                <i class="fa-solid fa-plus"></i>
+                Nova movimentação
+              </button>
+            </div>
+            <div class="toolbar">
+              <input id="transaction-search" class="search" placeholder="Buscar movimentação...">
+              <select id="transaction-filter">
+                <option value="all">Todas</option>
+                <option value="entrada">Entradas</option>
+                <option value="saida">Saídas</option>
+              </select>
+            </div>
+            <div class="panel table-panel">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Data</th>
+                    <th>Descrição</th>
+                    <th>Categoria</th>
+                    <th>Tipo</th>
+                    <th>Valor</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody id="transactions-table"></tbody>
+              </table>
+            </div>
+          </section>
+          <section id="contas" class="section hidden">
+            <div class="section-heading">
+              <div>
+                <h2>Contas a pagar e receber</h2>
+                <p class="muted">Acompanhe seus compromissos financeiros.</p>
+              </div>
+              <button class="btn primary" data-modal="account">
+                <i class="fa-solid fa-plus"></i>
+                Agendar conta
+              </button>
+            </div>
+            <div id="accounts-grid" class="cards-grid"></div>
+          </section>
+          <section id="fornecedores" class="section hidden">
+            <div class="section-heading">
+              <div>
+                <h2>Fornecedores</h2>
+                <p class="muted">Organize parceiros e compras do seu negócio.</p>
+              </div>
+              <button class="btn primary" data-modal="supplier">
+                <i class="fa-solid fa-plus"></i>
+                Novo fornecedor
+              </button>
+            </div>
+            <div class="panel">
+              <p class="muted">Cadastre fornecedores e relacione-os aos produtos do estoque.</p>
+              <div id="suppliers-list" class="list"></div>
+            </div>
+          </section>
+          <section id="estoque" class="section hidden">
+            <div class="section-heading">
+              <div>
+                <h2>Estoque</h2>
+                <p class="muted">Controle produtos, entradas, saídas e níveis mínimos.</p>
+              </div>
+              <button class="btn primary" data-modal="product">
+                <i class="fa-solid fa-plus"></i>
+                Novo produto
+              </button>
+            </div>
+            <div class="kpi-grid stock-kpis">
+              <article class="kpi-card">
+                <div>
+                  <span>Produtos cadastrados</span>
+                  <strong id="stock-total">0</strong>
+                  <small class="muted">Itens ativos</small>
+                </div>
+                <i class="fa-solid fa-boxes-stacked kpi-icon"></i>
+              </article>
+              <article class="kpi-card">
+                <div>
+                  <span>Estoque baixo</span>
+                  <strong id="stock-low">0</strong>
+                  <small class="warning">Requer atenção</small>
+                </div>
+                <i class="fa-solid fa-triangle-exclamation kpi-icon yellow"></i>
+              </article>
+            </div>
+            <div class="panel table-panel">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Código</th>
+                    <th>Produto</th>
+                    <th>Categoria</th>
+                    <th>Quantidade</th>
+                    <th>Preço venda</th>
+                    <th>Fornecedor</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody id="products-table"></tbody>
+              </table>
+            </div>
+            <div class="panel table-panel stock-history">
+              <div class="panel-head">
+                <h3>Histórico de movimentações</h3>
+                <button class="btn secondary" data-modal="stock-move">Registrar entrada/saída</button>
+              </div>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Data</th>
+                    <th>Produto</th>
+                    <th>Movimento</th>
+                    <th>Quantidade</th>
+                    <th>Observação</th>
+                  </tr>
+                </thead>
+                <tbody id="stock-history-table"></tbody>
+              </table>
+            </div>
+          </section>
+          <section id="clientes" class="section hidden">
+            <div class="section-heading">
+              <div>
+                <h2>Clientes</h2>
+                <p class="muted">Sua base de relacionamento em um só lugar.</p>
+              </div>
+              <button class="btn primary" data-modal="client">
+                <i class="fa-solid fa-plus"></i>
+                Novo cliente
+              </button>
+            </div>
+            <div class="panel table-panel">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Cliente</th>
+                    <th>Contato</th>
+                    <th>Cadastro</th>
+                    <th>Total movimentado</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody id="clients-table"></tbody>
+              </table>
+            </div>
+          </section>
+          <section id="servicos" class="section hidden">
+            <div class="section-heading">
+              <div>
+                <h2>Serviços e comprovantes</h2>
+                <p class="muted">Registre trabalhos prestados e emita comprovantes.</p>
+              </div>
+              <button class="btn primary" data-modal="service">
+                <i class="fa-solid fa-plus"></i>
+                Registrar serviço
+              </button>
+            </div>
+            <div class="panel table-panel">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Data</th>
+                    <th>Cliente</th>
+                    <th>Serviço</th>
+                    <th>Valor</th>
+                    <th>Status</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody id="services-table"></tbody>
+              </table>
+            </div>
+          </section>
+          <section id="agenda" class="section hidden">
+            <div class="section-heading">
+              <div>
+                <h2>Agenda de serviços</h2>
+                <p class="muted">Organize seus atendimentos.</p>
+              </div>
+              <button class="btn primary" data-modal="event">
+                <i class="fa-solid fa-calendar-plus"></i>
+                Novo agendamento
+              </button>
+            </div>
+            <div id="agenda-list" class="agenda-list"></div>
+          </section>
+          <section id="calendario" class="section hidden">
+            <div class="section-heading">
+              <div>
+                <h2>Calendário empresarial</h2>
+                <p class="muted">Sua operação, compromissos e finanças sincronizados.</p>
+              </div>
+              <button class="btn primary" data-modal="event">
+                <i class="fa-solid fa-plus"></i>
+                Novo evento
+              </button>
+            </div>
+            <div class="calendar-toolbar">
+              <button id="prev-month" class="icon-btn">
+                <i class="fa-solid fa-chevron-left"></i>
+              </button>
+              <select id="calendar-month" aria-label="Selecionar mês"></select>
+              <select id="calendar-year" aria-label="Selecionar ano"></select>
+              <button id="next-month" class="icon-btn">
+                <i class="fa-solid fa-chevron-right"></i>
+              </button>
+              <div class="view-switch">
+                <button class="active" data-view="month">Mês</button>
+                <button data-view="week">Semana</button>
+                <button data-view="day">Dia</button>
+                <button data-view="year">Ano</button>
+              </div>
+            </div>
+            <div class="calendar-layout">
+              <div class="panel calendar-panel">
+                <div class="weekdays">
+                  <span>Dom</span>
+                  <span>Seg</span>
+                  <span>Ter</span>
+                  <span>Qua</span>
+                  <span>Qui</span>
+                  <span>Sex</span>
+                  <span>Sáb</span>
+                </div>
+                <div id="calendar-grid" class="calendar-grid"></div>
+              </div>
+              <aside class="panel calendar-side">
+                <h3>Próximos eventos</h3>
+                <div id="calendar-events"></div>
+              </aside>
+            </div>
+          </section>
+          <section id="relatorios" class="section hidden">
+            <div class="section-heading">
+              <div>
+                <h2>Relatórios financeiros</h2>
+                <p class="muted">Indicadores para decisões melhores.</p>
+              </div>
+              <button class="btn primary" id="export-report">
+                <i class="fa-solid fa-download"></i>
+                Exportar CSV
+              </button>
+            </div>
+            <div class="report-grid">
+              <article class="panel report-highlight">
+                <span>Resultado acumulado</span>
+                <strong id="report-result">R$ 0,00</strong>
+                <p>Entradas menos saídas no período.</p>
+              </article>
+              <article class="panel report-highlight">
+                <span>Ticket médio</span>
+                <strong id="report-ticket">R$ 0,00</strong>
+                <p>Média das movimentações de entrada.</p>
+              </article>
+            </div>
+            <div class="panel table-panel">
+              <div class="panel-head">
+                <h3>Resumo por categoria</h3>
+              </div>
+              <div id="category-report" class="category-list"></div>
+            </div>
+          </section>
+          <section id="configuracoes" class="section hidden">
+            <div class="section-heading">
+              <div>
+                <h2>Configurações</h2>
+                <p class="muted">Personalize o Fluxy para a realidade do seu negócio.</p>
+              </div>
+              <button id="save-settings" class="btn primary">
+                <i class="fa-solid fa-check"></i>
+                Salvar alterações
+              </button>
+            </div>
+            <div class="settings-grid">
+              <div class="panel settings-nav">
+                <button class="active" data-settings-tab="modules">
+                  <i class="fa-solid fa-cubes"></i>
+                  Módulos do sistema
+                </button>
+                <button data-settings-tab="company">
+                  <i class="fa-solid fa-building"></i>
+                  Dados da empresa
+                </button>
+                <button data-settings-tab="notifications">
+                  <i class="fa-regular fa-bell"></i>
+                  Notificações
+                </button>
+              </div>
+              <div class="panel settings-body">
+                <div data-settings-content="modules">
+                  <h3>Módulos ativos</h3>
+                  <p class="muted">
+                    Desative o que não faz parte da sua operação. As alterações ficam salvas neste dispositivo.
+                  </p>
+                  <div id="module-toggles" class="toggle-list"></div>
+                </div>
+                <div data-settings-content="company" class="hidden">
+                  <h3>Dados da empresa</h3>
+                  <div class="form-grid">
+                    <label>
+                      Nome da empresa
+                      <input id="company-name">
+                    </label>
+                    <label>
+                      CNPJ
+                      <input id="company-doc">
+                    </label>
+                    <label>
+                      Telefone
+                      <input id="company-phone">
+                    </label>
+                    <label>
+                      Fuso horário
+                      <select id="company-timezone">
+                        <option>America/Sao_Paulo</option>
+                        <option>America/Fortaleza</option>
+                      </select>
+                    </label>
+                  </div>
+                </div>
+                <div data-settings-content="notifications" class="hidden">
+                  <h3>Preferências de alertas</h3>
+                  <div class="toggle-list">
+                    <label class="toggle-row">
+                      <span>
+                        <b>Contas a vencer</b>
+                        <small>Alertar compromissos financeiros próximos.</small>
+                      </span>
+                      <input type="checkbox" id="notify-accounts">
+                      <i></i>
+                    </label>
+                    <label class="toggle-row">
+                      <span>
+                        <b>Entregas e recebimentos</b>
+                        <small>Notificar eventos operacionais do calendário.</small>
+                      </span>
+                      <input type="checkbox" id="notify-events">
+                      <i></i>
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+          <section id="perfil" class="section hidden">
+            <div class="section-heading">
+              <div>
+                <h2>Meu perfil</h2>
+                <p class="muted">Gerencie seus dados, segurança e privacidade.</p>
+              </div>
+              <button id="save-profile" class="btn primary">
+                <i class="fa-solid fa-check"></i>
+                Salvar perfil
+              </button>
+            </div>
+            <div class="profile-layout">
+              <div class="panel profile-card">
+                <span class="avatar huge" id="profile-avatar">FX</span>
+                <h3 id="profile-name-card">Seu perfil</h3>
+                <p class="muted" id="profile-email-card"></p>
+                <button class="btn secondary" id="change-avatar">
+                  <i class="fa-solid fa-camera"></i>
+                  Alterar foto
+                </button>
+                <small class="muted">PNG ou JPG até 5 MB</small>
+              </div>
+              <div class="panel profile-body">
+                <div class="profile-tabs">
+                  <button class="active" data-profile-tab="personal">Dados pessoais</button>
+                  <button data-profile-tab="security">Segurança</button>
+                  <button data-profile-tab="account">Conta</button>
+                </div>
+                <div data-profile-content="personal">
+                  <div class="form-grid">
+                    <label>
+                      Nome completo
+                      <input id="profile-name">
+                    </label>
+                    <label>
+                      E-mail
+                      <input id="profile-email" type="email">
+                    </label>
+                    <label>
+                      Telefone
+                      <input id="profile-phone">
+                    </label>
+                    <label>
+                      Data de cadastro
+                      <input id="profile-created" disabled>
+                    </label>
+                  </div>
+                </div>
+                <div data-profile-content="security" class="hidden">
+                  <div class="security-item">
+                    <span class="security-icon">
+                      <i class="fa-solid fa-lock"></i>
+                    </span>
+                    <div>
+                      <b>Alterar senha</b>
+                      <small>Atualize sua senha regularmente.</small>
+                    </div>
+                    <button class="btn secondary" data-modal="password">Alterar</button>
+                  </div>
+                  <div class="security-item">
+                    <span class="security-icon">
+                      <i class="fa-solid fa-shield-halved"></i>
+                    </span>
+                    <div>
+                      <b>Autenticação em duas etapas</b>
+                      <small>Proteja sua conta com uma camada extra.</small>
+                    </div>
+                    <label class="switch">
+                      <input type="checkbox" id="two-factor">
+                      <i></i>
+                    </label>
+                  </div>
+                  <div class="security-item">
+                    <span class="security-icon">
+                      <i class="fa-solid fa-clock-rotate-left"></i>
+                    </span>
+                    <div>
+                      <b>Histórico de logins</b>
+                      <small id="login-history">Nenhum acesso registrado.</small>
+                    </div>
+                  </div>
+                </div>
+                <div data-profile-content="account" class="hidden">
+                  <div class="account-actions">
+                    <button id="export-data" class="btn secondary">
+                      <i class="fa-solid fa-file-export"></i>
+                      Exportar meus dados
+                    </button>
+                    <button id="backup-data" class="btn secondary">
+                      <i class="fa-solid fa-database"></i>
+                      Baixar backup da conta
+                    </button>
+                    <button id="end-sessions" class="btn secondary">
+                      <i class="fa-solid fa-laptop"></i>
+                      Encerrar sessões ativas
+                    </button>
+                    <button id="delete-account" class="btn danger-btn">
+                      <i class="fa-solid fa-trash"></i>
+                      Excluir conta permanentemente
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </main>
+    </div>
+    <div id="modal" class="modal hidden">
+      <div class="modal-card">
+        <div class="modal-head">
+          <h3 id="modal-title"></h3>
+          <button class="icon-btn" id="close-modal">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+        <form id="modal-form"></form>
+      </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script src="js/core/api.js"></script>
+    <script src="js/core/auth.js"></script>
+
+    <script src="js/modules/meta/estoque.js"></script>
+    <script src="js/modules/meta/calendario.js"></script>
+    <script src="js/modules/meta/perfil.js"></script>
+    <script src="js/modules/meta/configuracoes.js"></script>
+
+    <script src="js/core/state.js"></script>
+    <script src="js/core/session.js"></script>
+    <script src="js/core/modal.js"></script>
+    <script src="js/modules/dashboard.js"></script>
+    <script src="js/modules/financeiro.js"></script>
+    <script src="js/modules/cadastros.js"></script>
+    <script src="js/modules/agenda-calendario.js"></script>
+    <script src="js/modules/relatorios-config.js"></script>
+    <script src="js/app.js"></script>
+
+    <script>
+      if (location.protocol === 'file:') {
+        document.addEventListener('DOMContentLoaded', function () {
+          var banner = document.createElement('div');
+          banner.style.cssText =
+            'position:fixed;z-index:9999;top:0;left:0;right:0;background:#b3261e;color:#fff;' +
+            'font:600 13px/1.4 system-ui,sans-serif;padding:10px 16px;text-align:center';
+          banner.innerHTML =
+            'Voce abriu o Fluxy direto pelo arquivo (file://). Feche esta janela e execute ' +
+            '<u>iniciar-fluxy</u>, depois acesse <u>http://localhost:8080</u> para cadastrar e entrar.';
+          document.body.appendChild(banner);
+        });
+      }
+    </script>
+  </body>
+</html>

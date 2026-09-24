@@ -1,0 +1,15 @@
+{
+  "name": "fluxy-local-app",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Fluxy - gestao financeira local, com frontend estatico e API Node.js (ou, opcionalmente, C) rodando na mesma maquina.",
+  "main": "backend/src/index.js",
+  "scripts": {
+    "start": "node backend/src/index.js",
+    "dev": "node backend/src/index.js",
+    "verify": "node tests/verify-local.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
