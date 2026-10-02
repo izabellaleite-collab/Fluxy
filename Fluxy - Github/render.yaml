@@ -1,0 +1,20 @@
+# API + banco do Fluxy no Render (https://render.com) - Blueprint.
+# Render > New > Blueprint > escolha este repositorio.
+# Depois preencha DATABASE_URL (ex.: Neon) no painel.
+services:
+  - type: web
+    name: fluxy-api
+    runtime: node
+    plan: free
+    buildCommand: npm install --omit=dev
+    startCommand: npm start
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_VERSION
+        value: "20"
+      - key: DATABASE_URL
+        sync: false
+      - key: DATABASE_SSL
+        value: "true"
+      - key: CORS_ORIGINS
+        value: https://izabellaleite-collab.github.io
